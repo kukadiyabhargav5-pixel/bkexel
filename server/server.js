@@ -20,6 +20,15 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Excel Generator API is running' });
 });
 
+// Serve frontend in production
+const path = require('path');
+const clientDistPath = path.join(__dirname, '../client/dist');
+app.use(express.static(clientDistPath));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(clientDistPath, 'index.html'));
+});
+
 // Connect to MongoDB and start server
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
